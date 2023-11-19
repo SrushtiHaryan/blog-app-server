@@ -3,10 +3,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 const bcrypt = require('bcrypt')
-const PORT = process.env.PORT || 8080;
-
-
+const jwt = require('jsonwebtoken');
 require('dotenv').config(); // Load environment variables from .env file
+const PORT = process.env.PORT || 8080;
+const secretKey = process.env.SECRET_KEY;
+
+
 
 app.use(
     cors({
@@ -85,8 +87,12 @@ app.post('/api/login', async (req, res) => {
             return res.json({ loggedIn: false, error: 'Invalid credentials' });
         }
 
+        console.log(secretKey)
+
+        const jwttoken = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1d' });
+
         // If both email and password match, send a success response
-        return res.status(200).json({ loggedIn: true, redirect: '/', username: user.username});
+        return res.status(200).json({ loggedIn: true, redirect: '/', username: user.username, token: jwttoken});
     } catch (error) {
         console.error('Login error:', error);
         return res.status(500).json({ loggedIn: false, error: 'Server error' });
