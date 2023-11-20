@@ -20,7 +20,7 @@ app.use(
 
 app.use(express.json());
 
-// Use the environment variables in your application
+
 const databaseUrl = process.env.DATABASE_URL;
 console.log(databaseUrl)
 mongoose
@@ -34,7 +34,7 @@ mongoose
 const User = require('./models/User');
 const Blog = require('./models/Blog');
 
-// Sample endpoint to respond to GET requests
+
 app.get('/', (req, res) => {
     res.json({ message: 'Hello from the server!' });
 });
